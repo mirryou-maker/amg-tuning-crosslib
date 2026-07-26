@@ -1,0 +1,48 @@
+#!/bin/sh
+#PBS -N hypre_h2
+#PBS -q workq
+#PBS -l select=4:ncpus=20:mpiprocs=1
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# H2: full 150-matrix hypre BoomerAMG sweep (36 configs = 5,400 runs).
+# Same discipline as the AMGCL sweeps: one single-threaded runner per node,
+# matrices sharded across nodes, ramp RHS (built into hypre_runner), 30s cut,
+# in-process repeat=3 minimum. hypre is sequential (no MPI in the solver); MPI
+# here is only the cross-node work distribution.
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+module load OPENMPI/4.1.4.GCC8.5
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/hypre_h2"
+
+mkdir -p "$WORK/data"
+rm -rf "$WORK/tools" "$WORK/build"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/data/phase2_matrices.csv" "$WORK/data/"
+[ -e "$WORK/data/matrices" ] || ln -s "$SRC/data/matrices" "$WORK/data/matrices"
+
+cd "$WORK"
+sort -u "$PBS_NODEFILE" > hosts.txt
+NN=$(wc -l < hosts.txt)
+echo "nodes=$NN started=$(date -Is)"; cat hosts.txt
+
+export SWEEP_OUT=hypre_h2
+export SWEEP_MATRICES=data/phase2_matrices.csv
+export SWEEP_TIMEOUT=30
+
+mpirun -np "$NN" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    -x SWEEP_OUT -x SWEEP_MATRICES -x SWEEP_TIMEOUT \
+    sh tools/hypre_shard_worker.sh "$NN"
+
+echo "finished=$(date -Is)"
+cat data/hypre_h2.rank*.jsonl > data/hypre_h2.jsonl
+echo "merged $(wc -l < data/hypre_h2.jsonl) records"

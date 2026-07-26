@@ -1,0 +1,65 @@
+#!/bin/sh
+#PBS -N amgsweep
+#PBS -q workq
+#PBS -l select=2:ncpus=20:mpiprocs=1
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# Phase 1 parameter sweep on iREMB -- two nodes, one sharded runner each.
+#
+# Why one runner per node instead of filling all 20 cores:
+# the cv_probe job measured that these Haswell nodes are memory-bandwidth
+# bound. Running 4 concurrent solves already inflated a 36 ms solve to 116 ms
+# (3.2x), and 8+ concurrent runs also blew CV past 5%. Because different
+# preconditioners have different bandwidth intensity, that contention distorts
+# the per-matrix oracle ratio -- the paper's headline number. So timing runs
+# single-process (OMP_NUM_THREADS=1, jobs=1), and parallelism comes from
+# splitting the matrix set across the two allocated nodes. Each matrix's whole
+# config grid stays on one node, so its ratio is measured under identical
+# conditions.
+#
+# reps=1 because the runner already does repeat=3 in-process and reports the
+# minimum, which amortises startup noise; an outer rep loop would be redundant.
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+module load OPENMPI/4.1.4.GCC8.5
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/amgsweep"
+
+# Stage into scratch (shared filesystem, so one copy serves both nodes).
+# Remove old code/build first: overwriting the runner binary in place fails
+# with "Text file busy" if any handle lingers from a prior job on the shared
+# filesystem. Matrices are large and immutable, so they are never re-copied.
+mkdir -p "$WORK/data"
+rm -rf "$WORK/tools" "$WORK/build"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/data/pilot_matrices_final.csv" "$WORK/data/"
+[ -d "$WORK/data/matrices" ] || cp -r "$SRC/data/matrices" "$WORK/data/"
+
+cd "$WORK"
+sort -u "$PBS_NODEFILE" > hosts.txt
+NNODES=$(wc -l < hosts.txt)
+echo "nodes=$NNODES started=$(date -Is)"
+cat hosts.txt
+
+# Launch one sharded worker per node. --map-by ppr:1:node puts exactly one
+# process on each host; --prefix is required or orted is not found on the
+# remote node (module env does not propagate).
+mpirun -np "$NNODES" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    sh tools/shard_worker.sh "$NNODES"
+
+echo "finished=$(date -Is)"
+
+# mpirun has joined all ranks, so every shard file is complete. Merge now.
+cat data/sweep_iremb.rank*.jsonl > data/sweep_iremb.jsonl
+echo "merged $(wc -l < data/sweep_iremb.jsonl) records from $(ls data/sweep_iremb.rank*.jsonl | wc -l) shards"
+
+python tools/analyze.py --results data/sweep_iremb.jsonl | tee data/analysis.txt

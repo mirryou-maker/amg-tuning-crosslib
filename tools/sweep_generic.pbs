@@ -1,0 +1,88 @@
+#!/bin/sh
+#PBS -q workq
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# Generic phase-1b sweep, driven entirely by -v variables so the three probes
+# share one script and cannot drift apart. Submit with, e.g.:
+#
+#   qsub -N p1b_ramp  -l select=2:ncpus=20:mpiprocs=1 -l walltime=06:00:00 \
+#        -v SWEEP_OUT=p1b_ramp \
+#        tools/sweep_generic.pbs
+#
+#   qsub -N p1b_tol6  -l select=2:ncpus=20:mpiprocs=1 -l walltime=04:00:00 \
+#        -v SWEEP_OUT=p1b_tol6,SWEEP_TOL=1e-6,SWEEP_ONLY="$TOL_SET" \
+#        tools/sweep_generic.pbs
+#
+#   qsub -N p1b_scale -l select=1:ncpus=20:mpiprocs=1 -l walltime=02:00:00 \
+#        -v SWEEP_OUT=p1b_scale,SWEEP_EXTRA=scale=1,SWEEP_ONLY="$SCALE_SET" \
+#        tools/sweep_generic.pbs
+#
+# Two lessons from the first phase-1b attempt are baked in:
+#   1. Per-job WORK dir. The previous run let concurrent tol6 and scale jobs
+#      share /scratch/$USER/amgsweep and race on `rm -rf tools; cp`, killing
+#      the scale job in 2s. WORK is now keyed by job name.
+#   2. Flat 30s timeout, not adaptive-to-120s. The adaptive clamp made every
+#      hard matrix burn up to 120s x 88 configs and blew the 8h walltime at
+#      ~38% done. All oracle signal lives in fast configs; a 30s cut captures
+#      it and is the proven-feasible budget (full Phase 1 ran in 4.75h).
+#      Classifying big-but-slow all-fail matrices is a separate targeted probe,
+#      not a reason to 4x the whole sweep.
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+module load OPENMPI/4.1.4.GCC8.5
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/amgsweep_${SWEEP_OUT:-run}"   # per-job, no cross-job race
+
+MATRICES_CSV="${SWEEP_MATRICES:-data/pilot_matrices_final.csv}"
+
+mkdir -p "$WORK/data"
+rm -rf "$WORK/tools" "$WORK/build"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/$MATRICES_CSV" "$WORK/data/"
+# Matrices are large and shared; link instead of copying the whole corpus.
+[ -e "$WORK/data/matrices" ] || ln -s "$SRC/data/matrices" "$WORK/data/matrices"
+
+cd "$WORK"
+sort -u "$PBS_NODEFILE" > hosts.txt
+NNODES=$(wc -l < hosts.txt)
+echo "job=$SWEEP_OUT nodes=$NNODES work=$WORK started=$(date -Is)"
+cat hosts.txt
+
+# Named matrix subsets live here, not in -v: PBS -v splits on commas, so a
+# comma-separated SWEEP_ONLY cannot be passed at submit time. The subset is
+# selected by SWEEP_SUBSET (tol6 | scale | <empty for all 50>).
+TOL_SET="AMD/G2_circuit,Bindel/ted_B,Cunningham/qa8fm,Engwirda/airfoil_2d,GHS_indef/bloweybq,Guettel/TEM27623,JGD_Trefethen/Trefethen_20000b,Lin/Lin,Lourakis/bundle1,MaxPlanck/shallow_water1,Mulvey/finan512,Schmid/thermal1,TKK/cbuckle,Um/2cubes_sphere,ACUSIM/Pres_Poisson,Cote/vibrobox,Garon/garon2,IBM_Austin/coupled,LiuWenzhuo/powersim,Mancktelow/viscorocks,Rothberg/cfd1,Rudnyi/water_tank,Sanghavi/ecl32,Shyy/shyy161,Szczerba/Ill_Stokes"
+SCALE_SET="Bindel/ted_A,Bomhof/circuit_3,HVDC/hvdc1,LeGresley/LeGresley_87936,Oberwolfach/inlet,Quaglino/viscoplastic2,Vavasis/av41092"
+
+case "${SWEEP_SUBSET:-}" in
+    tol6)  SWEEP_ONLY="$TOL_SET" ;;
+    scale) SWEEP_ONLY="$SCALE_SET" ;;
+    *)     SWEEP_ONLY="" ;;
+esac
+
+# Flat timeout by default; export the knobs the worker reads.
+export SWEEP_OUT
+export SWEEP_POLICY="${SWEEP_POLICY:-fixed}"
+export SWEEP_TIMEOUT="${SWEEP_TIMEOUT:-30}"
+export SWEEP_TOL="${SWEEP_TOL:-1e-8}"
+export SWEEP_EXTRA="${SWEEP_EXTRA:-}"
+export SWEEP_ONLY
+export SWEEP_MATRICES="data/$(basename "$MATRICES_CSV")"
+
+mpirun -np "$NNODES" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    -x SWEEP_OUT -x SWEEP_POLICY -x SWEEP_TIMEOUT -x SWEEP_TOL \
+    -x SWEEP_EXTRA -x SWEEP_ONLY -x SWEEP_MATRICES \
+    sh tools/shard_worker.sh "$NNODES"
+
+echo "finished=$(date -Is)"
+cat data/${SWEEP_OUT}.rank*.jsonl > data/${SWEEP_OUT}.jsonl
+echo "merged $(wc -l < data/${SWEEP_OUT}.jsonl) records"
+python tools/analyze.py --results data/${SWEEP_OUT}.jsonl | tee data/${SWEEP_OUT}_analysis.txt

@@ -1,0 +1,214 @@
+13200 runs loaded from data/p2_sweep.jsonl
+
+=== status counts ===
+  timeout     5587
+  ok          3177
+  error       1793
+  maxiter     1376
+  diverged    1243
+  crash         24
+
+=== per-matrix summary ===
+matrix                              ok fail  default(s)   best(s)  oracle best config                     
+------------------------------------------------------------------------------------------------------------
+ATandT/onetone1                      0   88           -         -       - -                               
+ATandT/onetone2                      0   88           -         -       - -                               
+ATandT/twotone                       0   88           -         -       - -                               
+Averous/epb1                        86    2      0.7375    0.0360   20.51 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=gauss_seidel
+Averous/epb2                        40   48           -    0.1348       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Averous/epb3                        26   62           -    0.6298       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=1 relax.type=iluk
+Bindel/ted_A                         0   88           -         -       - -                               
+Bindel/ted_A_unscaled                0   88           -         -       - -                               
+Bindel/ted_B                        88    0      0.0125    0.0063    1.99 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+Bindel/ted_B_unscaled               88    0      0.0071    0.0040    1.76 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=damped_jacobi
+Boeing/crystk03                     10   78           -    3.5553       - coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=ilu0
+Boeing/ct20stif                      0   88           -         -       - -                               
+Boeing/msc10848                     27   61           -    5.0287       - coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+Botonakis/FEM_3D_thermal1           70   18      1.4366    0.0400   35.94 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Botonakis/FEM_3D_thermal2           50   38           -    0.3573       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Botonakis/thermomech_TK             88    0      0.3856    0.2769    1.39 coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+Botonakis/thermomech_dK              0   88           -         -       - -                               
+CPM/cz10228                         66   22      0.0868    0.0526    1.65 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+CPM/cz20468                         53   35      0.3884    0.1991    1.95 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+CPM/cz40948                         26   62           -    0.7166       - coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+Cunningham/k3plates                  0   88           -         -       - -                               
+Cunningham/qa8fk                    66   22      1.4113    0.4481    3.15 coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=damped_jacobi
+Cunningham/qa8fm                    78   10      5.3335    0.0997   53.51 coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel
+DNVS/ship_003                        0   88           -         -       - -                               
+DNVS/shipsec5                        0   88           -         -       - -                               
+DNVS/shipsec8                        0   88           -         -       - -                               
+DNVS/thread                          0   88           -         -       - -                               
+FEMLAB/ns3Da                         0   88           -         -       - -                               
+FEMLAB/poisson3Db                   48   40      2.4263    1.6834    1.44 coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=ilu0
+FEMLAB/sme3Da                       21   67           -    3.4995       - coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.type=ilu0
+FEMLAB/sme3Db                        0   88           -         -       - -                               
+FIDAP/ex11                           2   86           -    5.2423       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=chebyshev
+FIDAP/ex19                           3   85      1.3357    1.3357    1.00 coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=spai0
+FIDAP/ex35                           0   88           -         -       - -                               
+FlowIPM22/Spielman_k100             68   20      6.7139    0.5500   12.21 coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel
+FlowIPM22/uni_chimera_i1            59   29      1.6658    0.3594    4.63 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+FlowIPM22/uni_chimera_i3            70   18      2.4910    0.5968    4.17 coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.type=gauss_seidel
+FlowIPM22/uni_chimera_i4            67   21      2.1408    0.7947    2.69 coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+GHS_indef/bloweybq                  55   33      0.0108    0.0029    3.76 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+GHS_indef/boyd2                      0   88           -         -       - -                               
+GHS_indef/dawson5                    0   88           -         -       - -                               
+GHS_psdef/s3dkt3m2                   0   88           -         -       - -                               
+GHS_psdef/vanbody                    0   88           -         -       - -                               
+GHS_psdef/wathen100                 63   25      0.1134    0.0475    2.39 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Gaertner/big                        84    4      0.2744    0.1962    1.40 coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+Gaertner/nopoly                     85    3      0.0248    0.0209    1.19 coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=ilu0
+Gaertner/pesa                       86    2      0.0741    0.0612    1.21 coarsening.aggr.eps_strong=0.15 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+Goodwin/Goodwin_030                 37   51           -    0.3988       - coarsening.aggr.eps_strong=0.15 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk
+Goodwin/Goodwin_054                 23   65           -    1.8255       - coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk
+Goodwin/Goodwin_095                  6   82           -    7.9594       - coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk
+Goodwin/rim                          0   88           -         -       - -                               
+Grund/bayer01                        0   88           -         -       - -                               
+Grund/bayer02                        0   88           -         -       - -                               
+Grund/bayer04                        0   88           -         -       - -                               
+Grund/bayer10                        0   88           -         -       - -                               
+HB/bcsstk17                         25   63           -    1.3622       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=2 relax.type=iluk
+HB/bcsstk18                         39   49           -    0.4613       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=2 relax.type=iluk
+HB/bcsstk25                          1   87           -    2.6032       - coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=gauss_seidel
+Hamm/bcircuit                       77   11      0.5424    0.2916    1.86 coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=damped_jacobi
+Hamm/hcircuit                        9   79           -    1.7781       - coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+Hamm/memplus                        51   37      7.3102    0.0250  292.28 coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel
+Hamm/scircuit                        0   88           -         -       - -                               
+Hohn/fd15                            0   88           -         -       - -                               
+Hohn/fd18                            0   88           -         -       - -                               
+Hohn/sinc15                          0   88           -         -       - -                               
+Hohn/sinc18                          0   88           -         -       - -                               
+Hollinger/g7jac040                   0   88           -         -       - -                               
+Hollinger/jan99jac100sc              0   88           -         -       - -                               
+Hollinger/mark3jac140sc              0   88           -         -       - -                               
+IBM_EDA/ckt11752_dc_1                0   88           -         -       - -                               
+IBM_EDA/dc2                         10   78           -    0.6573       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=gauss_seidel
+IBM_EDA/trans5                      22   66           -    0.5326       - coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel
+IPSO/HTC_336_4438                    0   88           -         -       - -                               
+IPSO/HTC_336_9129                    0   88           -         -       - -                               
+IPSO/OPF_10000                       0   88           -         -       - -                               
+IPSO/OPF_3754                        0   88           -         -       - -                               
+IPSO/OPF_6000                        0   88           -         -       - -                               
+JGD_Homology/ch7-8-b5                0   88           -         -       - -                               
+JGD_Homology/m133-b3                 0   88           -         -       - -                               
+JGD_Homology/shar_te2-b3             0   88           -         -       - -                               
+ML_Graph/Fashion_MNIST_norm_10NN     0   88           -         -       - -                               
+ML_Graph/har_10NN                    0   88           -         -       - -                               
+ML_Graph/k49_norm_10NN               0   88           -         -       - -                               
+Mallya/lhr10                         0   88           -         -       - -                               
+Mallya/lhr17                         0   88           -         -       - -                               
+Mallya/lhr71c                        0   88           -         -       - -                               
+Norris/lung2                        43   45      3.6033    0.0424   84.91 coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=ilu0
+Norris/stomach                       8   80           -    1.8552       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=1 relax.type=iluk
+Norris/torso2                       88    0      0.2571    0.1079    2.38 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Norris/torso3                       29   59      5.6052    1.2389    4.52 coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=ilu0
+Oberwolfach/chipcool1               77   11      0.3462    0.0779    4.44 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=gauss_seidel
+Oberwolfach/filter3D                16   72      2.2624    1.9017    1.19 coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=gauss_seidel
+Oberwolfach/t2dah_a                 36   52           -    0.3122       - coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.k=2 relax.type=iluk
+PARSEC/GaAsH6                        0   88           -         -       - -                               
+PARSEC/H2O                          59   29      0.8595    0.8163    1.05 coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=gauss_seidel
+PARSEC/Si10H16                      20   68      4.6893    4.1509    1.13 coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=damped_jacobi
+PARSEC/Si5H12                       61   27      1.5317    0.7846    1.95 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=gauss_seidel
+PARSEC/SiO                          50   38      1.0242    0.9289    1.10 coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=gauss_seidel
+Pothen/bodyy4                       88    0      0.1549    0.0254    6.11 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+Pothen/bodyy5                       88    0      0.3064    0.0428    7.15 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+Pothen/bodyy6                       88    0      0.5836    0.0629    9.27 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.k=1 relax.type=iluk
+Rajat/rajat16                        0   88           -         -       - -                               
+Rajat/rajat21                        0   88           -         -       - -                               
+Rajat/rajat27                        0   88           -         -       - -                               
+Rajat/rajat28                        0   88           -         -       - -                               
+Rommes/bauru5727                     0   88           -         -       - -                               
+Rommes/bips98_1450                   4   84           -    0.0902       - coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=damped_jacobi
+Rommes/mimo8x8_system                2   86           -    0.1616       - coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=damped_jacobi
+Sandia/ASIC_100ks                   59   29      0.5094    0.0760    6.70 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+Sandia/ASIC_320k                    15   73           -    1.5065       - coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=gauss_seidel
+Sandia/mult_dcop_01                  0   88           -         -       - -                               
+Schenk_IBMNA/c-42                    0   88           -         -       - -                               
+Schenk_IBMNA/c-57                    0   88           -         -       - -                               
+Schenk_IBMNA/c-big                   0   88           -         -       - -                               
+Schenk_IBMSDS/2D_27628_bjtcai        7   81           -    2.1752       - coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk
+Schenk_IBMSDS/ibm_matrix_2          14   74           -    0.6031       - coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=ilu0
+Schenk_IBMSDS/matrix-new_3           5   83           -    1.3312       - coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+Schenk_ISEI/barrier2-12              0   88           -         -       - -                               
+Schenk_ISEI/igbt3                    3   85           -    1.8537       - coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.k=1 relax.type=iluk
+Schenk_ISEI/para-9                   0   88           -         -       - -                               
+Simon/appu                          33   55      1.0366    0.3512    2.95 coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=spai0
+Simon/bbmat                          0   88           -         -       - -                               
+Simon/venkat50                       9   79           -    3.2385       - coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.k=2 relax.type=iluk
+TKK/cbuckle                         51   37      2.7565    0.3189    8.64 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=1 relax.type=iluk
+TKK/cyl6                             3   85           -    4.4146       - coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=spai0
+TKK/engine                           0   88           -         -       - -                               
+TKK/smt                              1   87           -    8.3080       - coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel
+TKK/tube2                            0   88           -         -       - -                               
+TSOPF/TSOPF_FS_b162_c1               0   88           -         -       - -                               
+TSOPF/TSOPF_FS_b300                  0   88           -         -       - -                               
+TSOPF/TSOPF_FS_b39_c30               0   88           -         -       - -                               
+TSOPF/TSOPF_RS_b300_c2               0   88           -         -       - -                               
+UTEP/Dubcova1                       88    0      0.1159    0.0855    1.36 coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0
+UTEP/Dubcova2                       83    5      1.0456    0.6176    1.69 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel
+UTEP/Dubcova3                       61   27      4.1571    2.5219    1.65 coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0
+VDOL/hangGlider_3                    0   88           -         -       - -                               
+VDOL/lowThrust_13                    0   88           -         -       - -                               
+VDOL/lowThrust_7                     0   88           -         -       - -                               
+VLSI/imagesensor                     0   88           -         -       - -                               
+VLSI/mosfet2                        15   73           -    1.9045       - coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=ilu0
+VLSI/nv1                             0   88           -         -       - -                               
+VLSI/ss1                            88    0      0.0933    0.0719    1.30 coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=ilu0
+VanVelzen/Zd_Jac2                    0   88           -         -       - -                               
+VanVelzen/Zd_Jac2_db                 0   88           -         -       - -                               
+VanVelzen/Zd_Jac6                    0   88           -         -       - -                               
+VanVelzen/std1_Jac2_db               0   88           -         -       - -                               
+Williams/cant                        0   88           -         -       - -                               
+Williams/cop20k_A                    0   88           -         -       - -                               
+Williams/mac_econ_fwd500             0   88           -         -       - -                               
+Williams/pdb1HYS                    12   76           -    5.9438       - coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=ilu0
+
+=== oracle speedup (n=41, graphlike excluded) ===
+  min      1.00
+  Q1       1.40
+  median   2.38
+  Q3       6.40
+  max    292.28
+  >= 2x  21/41 (51%)
+
+=== winning configuration frequency ===
+  coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=ilu0   7
+  coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=ilu0   6
+  coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=gauss_seidel   6
+  coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=gauss_seidel   5
+  coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=gauss_seidel   4
+  coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=1 relax.type=iluk   3
+  coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=gauss_seidel   3
+  coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=ilu0   3
+  coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=damped_jacobi   2
+  coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk   2
+  coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.k=2 relax.type=iluk   2
+  coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.type=gauss_seidel   2
+  coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=ilu0   2
+  coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.type=damped_jacobi   1
+  coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=ilu0   1
+  coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=gauss_seidel   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.type=ilu0   1
+  coarsening.aggr.eps_strong=0.01 coarsening.type=aggregation relax.type=chebyshev   1
+  coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=spai0   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.type=gauss_seidel   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=gauss_seidel   1
+  coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=ilu0   1
+  coarsening.aggr.eps_strong=0.15 coarsening.type=smoothed_aggregation relax.type=gauss_seidel   1
+  coarsening.aggr.eps_strong=0.15 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.k=1 relax.type=iluk   1
+  coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=gauss_seidel   1
+  coarsening.eps_strong=0.5 coarsening.type=ruge_stuben relax.type=damped_jacobi   1
+  coarsening.aggr.eps_strong=0.08 coarsening.type=smoothed_aggregation relax.type=ilu0   1
+  coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.k=2 relax.type=iluk   1
+  coarsening.aggr.eps_strong=0.15 coarsening.type=aggregation relax.k=1 relax.type=iluk   1
+  coarsening.aggr.eps_strong=0.01 coarsening.type=smoothed_aggregation relax.type=damped_jacobi   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=damped_jacobi   1
+  coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=gauss_seidel   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=aggregation relax.k=1 relax.type=iluk   1
+  coarsening.eps_strong=0.1 coarsening.type=ruge_stuben relax.type=spai0   1
+  coarsening.aggr.eps_strong=0.08 coarsening.type=aggregation relax.k=2 relax.type=iluk   1
+  coarsening.eps_strong=0.25 coarsening.type=ruge_stuben relax.type=spai0   1
+  coarsening.aggr.eps_strong=0.03 coarsening.type=smoothed_aggregation relax.type=ilu0   1
+
+  (a single dominant winner would mean the default should just be changed;
+   a spread means per-matrix selection has room)

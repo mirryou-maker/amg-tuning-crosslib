@@ -1,0 +1,48 @@
+#!/bin/sh
+#PBS -N mpismoke
+#PBS -q workq
+#PBS -l select=2:ncpus=20:mpiprocs=1
+#PBS -l walltime=00:15:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# De-risk the 2-node launch before the real 8h sweep: confirm --prefix works,
+# one process lands per node, the rank env var is set, and a 1-matrix sharded
+# sweep actually runs end to end on a compute node.
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+module load OPENMPI/4.1.4.GCC8.5
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/amgsweep"
+mkdir -p "$WORK/data"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/data/pilot_matrices_final.csv" "$WORK/data/"
+[ -d "$WORK/data/matrices" ] || cp -r "$SRC/data/matrices" "$WORK/data/"
+cd "$WORK"
+sort -u "$PBS_NODEFILE" > hosts.txt
+NN=$(wc -l < hosts.txt)
+echo "nodes=$NN"; cat hosts.txt
+
+echo "--- plumbing: rank/host map ---"
+mpirun -np "$NN" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    sh -c 'echo "rank ${OMPI_COMM_WORLD_RANK}/${OMPI_COMM_WORLD_SIZE} on $(hostname)"'
+
+echo "--- 1-matrix sharded sweep (qa8fm only, tiny grid via reps=1) ---"
+mpirun -np "$NN" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    sh -c '. /etc/profile.d/modules.sh; module load ANACONDA/1-2024.10;
+           export OMP_NUM_THREADS=1;
+           python tools/sweep.py --only Cunningham \
+               --out data/smoke.rank${OMPI_COMM_WORLD_RANK}.jsonl \
+               --shard ${OMPI_COMM_WORLD_RANK}/${OMPI_COMM_WORLD_SIZE} \
+               --reps 1 --repeat 2 --timeout 30 --jobs 1'
+
+echo "--- results ---"
+wc -l data/smoke.rank*.jsonl 2>/dev/null || echo "no smoke output"

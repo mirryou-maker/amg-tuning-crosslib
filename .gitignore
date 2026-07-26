@@ -1,0 +1,24 @@
+# External dependencies (fetched, not committed)
+ext/
+data/matrices/
+
+# Build artifacts
+build/
+*.o
+*.exe
+*.out
+
+# LaTeX build products (keep .tex, .png, and the built PDFs)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/arxiv/
+paper/*.synctex.gz
+
+# Python
+__pycache__/
+*.pyc
+
+# Scratch / logs
+*.tmp
+tags/

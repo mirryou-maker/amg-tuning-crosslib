@@ -1,0 +1,41 @@
+#!/bin/sh
+#PBS -N hypre_pilot
+#PBS -q workq
+#PBS -l select=1:ncpus=20
+#PBS -l walltime=02:00:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# H1: does hypre BoomerAMG show oracle speedup on the pilot matrices?
+# 12 matrices x 36 configs. Single-threaded runner, node-exclusive (timing).
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/hypre_pilot"
+mkdir -p "$WORK/data"
+rm -rf "$WORK/tools" "$WORK/build"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/data/phase2_matrices.csv" "$WORK/data/"
+[ -e "$WORK/data/matrices" ] || ln -s "$SRC/data/matrices" "$WORK/data/matrices"
+cd "$WORK"
+
+export OMP_NUM_THREADS=1
+export OMP_PROC_BIND=close
+export OMP_PLACES=cores
+# hypre_runner needs its shared-free static lib; nothing to LD_LIBRARY_PATH.
+
+ONLY="Cunningham/qa8fm,FlowIPM22/Spielman_k100,Pothen/bodyy6,TKK/cbuckle,GHS_indef/bloweybq,GHS_psdef/wathen100,Bindel/ted_B,UTEP/Dubcova2,Botonakis/thermomech_TK,Hamm/memplus,Norris/lung2,Averous/epb1"
+
+echo "started=$(date -Is) host=$(hostname)"
+python tools/hypre_sweep.py \
+    --matrices data/phase2_matrices.csv \
+    --out data/hypre_pilot.jsonl \
+    --only "$ONLY" \
+    --reps 1 --repeat 3 --timeout 30
+echo "finished=$(date -Is)"

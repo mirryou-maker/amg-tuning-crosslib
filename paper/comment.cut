@@ -1,0 +1,14 @@
+This work was supported by the National Research Foundation of Korea (NRF)
+(No.\ RS-2026-25502724) and the Strategic Research Program under the DGIST R\&D
+Program (26-SR-01) of the Ministry of Science, ICT, and Future Planning.
+
+\emph{Generative AI disclosure.} In accordance with the ACM Policy on
+Authorship, the author discloses the use of an AI coding assistant (Claude
+Code, Anthropic) in this work: it assisted in implementing the benchmark
+harness, the tiered feature extractor, and the gradient-boosted predictor; in
+orchestrating the parameter sweeps and the cross-library build on the compute
+cluster; and in drafting and revising this manuscript. All experimental design
+decisions, numerical results, and scientific claims were checked by the author
+against the released code and data. The AI system is not an author and bears no
+responsibility for the content; the author takes full responsibility for all
+material herein.

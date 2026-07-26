@@ -1,0 +1,35 @@
+#!/bin/sh
+#PBS -N cvprobe
+#PBS -q workq
+#PBS -l select=1:ncpus=20
+#PBS -l walltime=00:20:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# Concurrency-noise validation: pick the sweep's --jobs value from real data
+# on a node-exclusive compute node, not from a guess. Cheap (<20 min) and it
+# gates the 13,200-run sweep, so it runs first.
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/amgsweep"
+mkdir -p "$WORK"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+mkdir -p "$WORK/data"
+cp "$SRC/data/pilot_matrices_final.csv" "$WORK/data/" 2>/dev/null || true
+[ -d "$WORK/data/matrices" ] || cp -r "$SRC/data/matrices" "$WORK/data/"
+
+cd "$WORK"
+export OMP_NUM_THREADS=1
+export OMP_PROC_BIND=close
+export OMP_PLACES=cores
+
+echo "host=$(hostname) started=$(date -Is)"
+python tools/cv_probe.py --levels 1,4,8,16,20 --batches 6
+echo "finished=$(date -Is)"
