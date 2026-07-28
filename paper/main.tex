@@ -299,6 +299,19 @@ between libraries (Jaccard $0.76$). Whether a problem is solvable by AMG at all
 is a property of the matrix; how much tuning helps is a property of the
 matrix--library pair.
 
+\paragraph{A predictor confirms both directions.}
+The same predictor approach applies to \hypre{}: under leave-one-group-out it
+picks a configuration that solves $87\%$ of held-out matrices and captures a
+median $47\%$ of \hypre{}'s (modest) oracle --- comparable to the \amgcl{}
+figures. More tellingly, transferring \emph{matrix-level} models across
+libraries reproduces the two-part story. A ``will any configuration solve this
+matrix?'' classifier trained on one library and tested on the other beats its
+majority baseline by $+0.25$ to $+0.33$: intrinsic solvability transfers. But a
+regressor for the per-matrix oracle magnitude, trained on one library and
+tested on the other, predicts the target with rank correlation only
+$\approx\!0.2$: tuning benefit does not transfer. Difficulty is a
+library-independent property of the matrix; tunability is not.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.6\textwidth]{fig_crosslib.png}
