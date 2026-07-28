@@ -1,0 +1,38 @@
+Plain-text abstract for arXiv metadata (no LaTeX macros; $...$ math is allowed
+by arXiv but avoided here for portability).
+
+---
+
+Algebraic multigrid (AMG) is the workhorse preconditioner for large sparse
+linear systems, yet its performance depends strongly on internal parameters --
+coarsening scheme, smoother, and strength-of-connection threshold -- that most
+users leave at their defaults. We ask two questions empirically. First, how
+much speed is left on the table by not tuning these internal knobs (as opposed
+to the coarser "which solver" choice studied previously)? Second, can a good
+configuration be predicted from features that are cheap to compute relative to
+the solve itself? Sweeping 88 parameter configurations over 150 matrices from
+the SuiteSparse collection with AMGCL (13,200 solves), we find a median oracle
+speedup of 2.4x over the default (interquartile top 6.4x, maximum 292x), with
+the best configuration varying across 14 distinct coarsening/smoother labels --
+so per-matrix selection, not a single better default, is required. A
+gradient-boosted predictor trained and evaluated with a strict
+leave-one-group-out protocol picks a configuration that solves 83% of held-out
+matrices and captures about 43% of the achievable speedup (rising to 89% and
+49% when the matrix set is doubled to 300), and near-free structural features
+alone are as good as adding expensive spectral features that cost 100-1000x
+more. Crucially, we cross-validate on hypre BoomerAMG and find that while
+tunability replicates qualitatively (median oracle 1.6x), its magnitude does
+not transfer between libraries (rank correlation 0.24) and is largely governed
+by default quality: the dramatic AMGCL speedups occur precisely where its
+default is weak and hypre's well-engineered default already wins. Intrinsic
+solvability, by contrast, is library-independent (hard-matrix Jaccard 0.76), a
+split a transfer experiment confirms -- a "will it solve" classifier transfers
+across libraries while an oracle-magnitude regressor does not. All code, the
+sweep dataset, and the feature extractor are released for reproduction.
+
+---
+
+Comments field suggestion:
+10 pages, 5 figures, 2 tables. Reproducibility artifact (code + 18,600-solve
+dataset) at https://github.com/mirryou-maker/amg-tuning-crosslib (private during
+review). Companion ACM TOMS submission in preparation.
