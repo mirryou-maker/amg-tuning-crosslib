@@ -32,7 +32,7 @@ from fetch_suitesparse import load_index
 ROOT = Path(__file__).resolve().parent.parent
 
 MIN_GROUP = 3      # a chosen group must have at least this many eligible
-CAP = 6            # at most this many from one group
+CAP = 6            # default; overridable via --cap
 
 # Pure graph/network collections: AMG has no reason to work; Phase 1 confirmed
 # every such matrix failed all configs. Excluded to spend compute where a
@@ -68,13 +68,21 @@ def pick_from_group(ms, cap):
 
 
 def main():
+    global CAP
     ap = argparse.ArgumentParser()
     ap.add_argument("--target", type=int, default=150)
     ap.add_argument("--nmin", type=int, default=10_000)
     ap.add_argument("--nmax", type=int, default=500_000)
     ap.add_argument("--nnz-max", type=int, default=5_000_000)
+    ap.add_argument("--cap", type=int, default=CAP,
+                    help="max matrices from one group (diversity control)")
     ap.add_argument("--out", type=Path, default=ROOT / "data" / "phase2_matrices.csv")
+    ap.add_argument("--seed", type=Path,
+                    help="CSV of matrices to force-include first, so the output "
+                         "is a strict superset (nested expansion for clean "
+                         "'does more data help' comparison)")
     args = ap.parse_args()
+    CAP = args.cap
 
     index = load_index()
     pool = eligible(index, args.nmin, args.nmax, args.nnz_max)
@@ -88,6 +96,18 @@ def main():
                     key=lambda g: (len(by_group[g]), g))
 
     selected, per_group = [], {}
+    # Force-include the seed set first (nested expansion). Match seed rows to
+    # pool entries by (group, name) so they carry full metadata.
+    if args.seed and args.seed.exists():
+        want = {(r["group"], r["name"]) for r in csv.DictReader(args.seed.open())}
+        idx_by_key = {(m["group"], m["name"]): m for m in pool}
+        for key in want:
+            m = idx_by_key.get(key)
+            if m:
+                selected.append(m)
+                per_group.setdefault(m["group"], []).append(m)
+        print(f"seeded {len(selected)} matrices from {args.seed.name}")
+
     # Round-robin deepening: give each group its share up to CAP until target.
     depth = 1
     while len(selected) < args.target and depth <= CAP:

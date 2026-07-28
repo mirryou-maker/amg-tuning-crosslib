@@ -252,6 +252,19 @@ $100$--$1000\times$ Tier~0/1 yet buys no predictive accuracy here.}
 \end{minipage}
 \end{figure}
 
+\paragraph{More data helps.}
+To check that the predictor is not saturated by the 150-matrix training set,
+we doubled it to 300 matrices (a strict superset, preserving the
+multiple-per-group structure) and re-evaluated under the same
+leave-one-group-out protocol. The predictor improves rather than plateaus: the
+number of evaluable matrices rises from 41 to 66, the picked configuration
+solves $89\%$ of held-out matrices (up from $83\%$), and the captured oracle
+speedup rises to a median $49\%$ (from $43\%$), while the oracle distribution
+itself stays stable (median $2.3\times$, maximum $292\times$). Tier~0 features
+remain sufficient at the larger scale ($49\%$ vs.\ $37\%$ for Tier~0+1). More
+labelled matrices therefore strengthen the signal, and the near-free feature
+finding is not an artifact of the smaller set.
+
 \section{Cross-library validation: does this generalise?}
 \label{sec:crosslib}
 

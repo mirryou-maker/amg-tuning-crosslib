@@ -1,0 +1,53 @@
+#!/bin/sh
+#PBS -N pe_sweep
+#PBS -q workq
+#PBS -l select=2:ncpus=20:mpiprocs=1
+#PBS -l walltime=24:00:00
+#PBS -j oe
+#PBS -V
+#PBS -r n
+
+# 300-matrix expansion (nested): sweep ONLY the 150 new matrices (the original
+# 150 are reused from p2_sweep.jsonl and merged afterward). AMGCL, 88 configs,
+# ramp RHS, 30s cut, one single-threaded runner per node, matrices sharded
+# across the nodes. 150 x 88 = 13,200 new solves.
+#
+# Node count is held to the 2-node allocation (iREMB policy). The sweep is
+# resumable -- it skips completed (matrix, config, rep) triples -- so if the
+# 24 h walltime is not enough, resubmitting this same script continues where it
+# left off (the per-rank JSONL files persist in the scratch WORK dir).
+
+set -e
+. /etc/profile.d/modules.sh
+module purge
+module load DEVTOOLSET/11
+module load ANACONDA/1-2024.10
+module load OPENMPI/4.1.4.GCC8.5
+
+SRC="$HOME/repos/Sparse-Matrix"
+WORK="/scratch/$USER/amgsweep_pe"
+
+mkdir -p "$WORK/data"
+rm -rf "$WORK/tools" "$WORK/build"
+cp -r "$SRC/tools" "$SRC/build" "$WORK/"
+cp "$SRC/data/phase_e_new_matrices.csv" "$WORK/data/"
+[ -e "$WORK/data/matrices" ] || ln -s "$SRC/data/matrices" "$WORK/data/matrices"
+
+cd "$WORK"
+sort -u "$PBS_NODEFILE" > hosts.txt
+NN=$(wc -l < hosts.txt)
+echo "nodes=$NN started=$(date -Is)"; cat hosts.txt
+
+export SWEEP_OUT=pe_sweep
+export SWEEP_MATRICES=data/phase_e_new_matrices.csv
+export SWEEP_TIMEOUT=30
+
+mpirun -np "$NN" --prefix /home/APP/Software/openmpi/4.1.4 \
+    --hostfile hosts.txt --map-by ppr:1:node \
+    -x SWEEP_OUT -x SWEEP_POLICY -x SWEEP_TIMEOUT -x SWEEP_TOL \
+    -x SWEEP_EXTRA -x SWEEP_ONLY -x SWEEP_MATRICES \
+    sh tools/shard_worker.sh "$NN"
+
+echo "finished=$(date -Is)"
+cat data/pe_sweep.rank*.jsonl > data/pe_sweep_new.jsonl
+echo "merged $(wc -l < data/pe_sweep_new.jsonl) new records"
