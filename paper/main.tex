@@ -7,6 +7,8 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \usepackage{xcolor}
@@ -147,7 +149,27 @@ relaxation schemes (\texttt{spai0/1}, damped Jacobi, Gauss--Seidel, Chebyshev,
 ILU(0), ILU(k) for $k\in\{1,2\}$), giving 88 configurations per matrix. SPD
 matrices are solved with conjugate gradients, others with BiCGStab. The
 strength-threshold path differs between coarsening families and is handled
-per-family.
+per-family. Table~\ref{tab:grid} lists both libraries' grids; the \hypre{}
+grid is matched in size and spans the analogous axes.
+
+\begin{table}[t]
+\centering
+\caption{Parameter grids. Each axis is crossed fully; SPD matrices use CG,
+others GMRES/BiCGStab.}
+\label{tab:grid}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+axis & \amgcl{} (88 configs) & \hypre{} BoomerAMG (36 configs) \\
+\midrule
+coarsening & smoothed agg., agg., Ruge--St\"uben & Falgout, PMIS, HMIS \\
+relaxation & spai0/1, damped Jacobi, Gauss--Seidel, & hybrid GS, sym.\ GS, \\
+           & Chebyshev, ILU(0), ILU(1), ILU(2) & L1 sym.\ GS, L1 Jacobi \\
+strength   & $\{0.01,0.03,0.08,0.15\}$ (agg.), & $\{0.25, 0.5, 0.7\}$ \\
+threshold  & $\{0.10,0.25,0.50\}$ (Ruge--St\"uben) & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Measurement discipline.}
 Every configuration is timed as setup${}+{}$solve to a relative residual of
@@ -160,7 +182,27 @@ single-threaded solver process per compute node and distribute matrices across
 nodes; a contention probe confirmed that co-running even four solves inflates a
 $36$~ms solve to $116$~ms. Runs are capped at 30~s wall-clock; failures are
 recorded by type (diverged, stalled at max-iterations, timed out, errored).
-Experiments ran on the DGIST iREMB cluster.
+Experiments ran on the DGIST iREMB cluster. Table~\ref{tab:status} shows the
+outcome distribution: only $24\%$ (\amgcl{}) and $30\%$ (\hypre{}) of all
+solves succeed, and time-outs dominate the failures --- which is why the
+per-matrix oracle is computed only over configurations that actually converge.
+
+\begin{table}[t]
+\centering
+\caption{Outcome distribution over all solves (\amgcl{}: 13{,}200; \hypre{}:
+5{,}400). ``ok'' means converged to the tolerance with a non-degenerate
+right-hand side.}
+\label{tab:status}
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+library & ok & timeout & max-iter & diverged & error & stalled \\
+\midrule
+\amgcl{} & $24.1\%$ & $42.3\%$ & $10.4\%$ & $9.4\%$ & $13.6\%$ & --- \\
+\hypre{} & $29.9\%$ & $32.4\%$ & $25.4\%$ & $9.2\%$ & --- & $3.1\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Features and predictor.}
 We extract features in three cost tiers: Tier~0 (structure: size, density,
@@ -174,6 +216,28 @@ succeed and its log solve-time; per matrix it picks the fastest
 predicted-successful configuration. \textbf{All predictor numbers use
 leave-one-group-out cross-validation}: every matrix from a held-out SuiteSparse
 group is excluded from training, so no sibling leaks across the split.
+Algorithm~\ref{alg:predict} states the selection procedure.
+
+\begin{algorithm}[t]
+\caption{Per-matrix configuration selection (evaluated leave-one-group-out).}
+\label{alg:predict}
+\begin{algorithmic}[1]
+\State \textbf{Input:} feature vectors $\phi(M)$; sweep results
+$\{(\,M,c,\text{status},t\,)\}$; groups $g(M)$
+\For{each held-out group $G$}
+  \State $\mathrm{Tr} \gets$ all runs with $g(M)\neq G$
+  \State fit classifier $S(\phi,c)\!\approx\!\Pr[\text{solve}]$ on $\mathrm{Tr}$
+  \State fit regressor $R(\phi,c)\!\approx\!\log t$ on solving runs of $\mathrm{Tr}$
+  \For{each matrix $M$ with $g(M)=G$}
+    \State $\mathcal{C}^{+}\!\gets\!\{c : S(\phi(M),c)>0.5\}$
+    \State $\hat{c}\gets \arg\min_{c\in\mathcal{C}^{+}} R(\phi(M),c)$;
+    if $\mathcal{C}^{+}\!=\!\emptyset$, $\hat{c}\gets\arg\max_c S(\phi(M),c)$
+    \State record whether $\hat{c}$ actually solved $M$, and
+    $t_{\text{default}}(M)/t_{\hat{c}}(M)$
+  \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 
 \section{How much is there to gain from tuning?}
 \label{sec:tuning}
