@@ -59,7 +59,8 @@ LICENSE                MIT
 data/                  matrix manifests (CSV); matrices themselves are fetched
 results/               RELEASED DATA: sweep JSONL + per-phase analysis notes
 tools/                 all code (see below)
-paper/                 manuscript (article + ACM TOMS versions) and figures
+paper/figure/          figure-generation scripts and figures (the manuscript
+                       itself is added here upon publication)
 docs/REPRODUCE.md      Level-2 full pipeline
 ```
 
