@@ -58,13 +58,12 @@ study of two widely-used pieces of mathematical software (AMGCL and hypre), it
 foregrounds honest methodology (feature-cost accounting and group-wise
 evaluation), and it is fully reproducible. We release the complete artifact —
 the 18,600-solve dataset, the feature extractor, the predictor, and all
-figure-generation scripts — at
-https://github.com/mirryou-maker/amg-tuning-crosslib (currently private; it will
-be made public upon acceptance, and we are glad to provide reviewer access
-immediately). A single command, `python reproduce.py`, regenerates every figure
-and headline number from the released data, and a companion tool,
-`tools/recommend.py`, applies the predictor to a user's own matrix. We would
-welcome consideration under the Replicated Computational Results process.
+figure-generation scripts — publicly at
+https://github.com/mirryou-maker/amg-tuning-crosslib . A single command,
+`python reproduce.py`, regenerates every figure and headline number from the
+released data, and a companion tool, `tools/recommend.py`, applies the predictor
+to a user's own matrix. We would welcome consideration under the Replicated
+Computational Results process.
 
 We confirm that this manuscript is original, has not been published previously,
 and is not under consideration elsewhere. In accordance with the ACM Policy on
