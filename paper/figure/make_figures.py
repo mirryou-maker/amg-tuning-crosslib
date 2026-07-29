@@ -125,13 +125,13 @@ ax1.set_xscale("log")
 ax1.axvline(2.0, color="grey", ls="--", lw=0.8)
 ax1.set_xlabel("oracle speedup  T(default) / T(best)")
 ax1.set_ylabel("cumulative fraction of matrices")
-ax1.set_title(f"(a) AMGCL oracle speedup (n={len(sp)})")
+ax1.text(0.03, 0.97, "(a)", transform=ax1.transAxes, va="top", fontweight="bold")
 ax2.boxplot([xs], vert=True, widths=0.6, showfliers=True,
             medianprops={"color": "#d1495b"})
 ax2.set_yscale("log")
 ax2.set_xticks([])
 ax2.set_ylabel("oracle speedup")
-ax2.set_title("(b) spread")
+ax2.text(0.08, 0.97, "(b)", transform=ax2.transAxes, va="top", fontweight="bold")
 fig.savefig(OUT / "fig_oracle_dist.png"); plt.close(fig)
 
 # ---- Fig 2: winner diversity -----------------------------------------
@@ -145,7 +145,6 @@ ax.bar(range(len(vals)), vals, color="#5b8c5a")
 ax.set_xticks(range(len(vals)))
 ax.set_xticklabels(labels, rotation=55, ha="right", fontsize=6.5)
 ax.set_ylabel("# matrices where it wins")
-ax.set_title(f"Winning (coarsening | relaxation) label — {len(items)} distinct, no dominant winner")
 fig.savefig(OUT / "fig_winners.png"); plt.close(fig)
 
 # ---- Fig 3: feature cost ---------------------------------------------
@@ -162,7 +161,6 @@ for patch, c in zip(bp["boxes"], ["#9ecae1", "#6baed6", "#d1495b"]):
 ax.set_yscale("log")
 ax.set_xticklabels(["Tier 0\n(structure)", "Tier 1\n(values)", "Tier 2\n(cond.)"])
 ax.set_ylabel("extraction time per matrix (s)")
-ax.set_title("Feature cost: Tier 2 is 100-1000x")
 fig.savefig(OUT / "fig_feature_cost.png"); plt.close(fig)
 
 # ---- Fig 4: predictor (values from phase2_predictor.py, code-backed) --
@@ -177,7 +175,6 @@ ax.bar(x-w/2, succ, w, label="picked config solved (%)", color="#5b8c5a")
 ax.bar(x+w/2, capt, w, label="oracle speedup captured (%)", color="#2c6fbb")
 ax.set_xticks(x); ax.set_xticklabels(tiers)
 ax.set_ylabel("percent"); ax.set_ylim(0, 100)
-ax.set_title("Predictor (leave-one-group-out)")
 ax.legend(loc="upper right", framealpha=0.9)
 fig.savefig(OUT / "fig_predictor.png"); plt.close(fig)
 
@@ -192,7 +189,6 @@ lim = [0.9, max(xa)*1.2]
 ax.plot(lim, lim, color="grey", ls="--", lw=0.8, label="y = x")
 ax.set_xlabel("AMGCL oracle speedup")
 ax.set_ylabel("hypre oracle speedup")
-ax.set_title(f"Cross-library (Spearman $\\rho$={rho:.2f}, n={len(common)})")
 ax.legend(loc="upper left")
 fig.savefig(OUT / "fig_crosslib.png"); plt.close(fig)
 

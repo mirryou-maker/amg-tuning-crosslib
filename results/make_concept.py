@@ -66,10 +66,6 @@ ax.text(26, 20.5, "does it generalise?", ha="center", va="center",
         fontsize=FS_LAB, fontstyle="italic", color="#7a2a3a", fontweight="bold",
         bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#c98", alpha=0.95))
 
-ax.text(50, 60.8, "Tuning internal AMG parameters: how much to gain, "
-        "can it be predicted, does it generalise?",
-        ha="center", fontsize=FS_SUP, fontweight="bold")
-
 fig.savefig(OUT, dpi=300, bbox_inches="tight")
 fig.savefig(OUT2, dpi=300, bbox_inches="tight")
 print("wrote", OUT, "and", OUT2)

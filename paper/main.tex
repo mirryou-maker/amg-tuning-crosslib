@@ -109,14 +109,16 @@ Figure~\ref{fig:overview} summarises the study end to end.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{concept_diagram.png}
-\caption{Overview. We sweep 88 internal configurations of \amgcl{} over 150
-(later 300) SuiteSparse matrices (1--2), measure the per-matrix oracle speedup
-of the best configuration over the default (3), and train a predictor on cheap
-matrix features to pick a good configuration under a leave-one-group-out
-protocol (4--6). We then repeat the sweep on \hypre{} BoomerAMG to test whether
-the findings generalise (7): tunability replicates but its magnitude is
-default-driven and does not transfer between libraries, whereas intrinsic
-solvability does.}
+\caption{Overview of the study, which asks three questions about tuning the
+internal parameters of AMG: how much is there to gain, can a good configuration
+be predicted, and does it generalise? We sweep 88 internal configurations of
+\amgcl{} over 150 (later 300) SuiteSparse matrices (1--2), measure the
+per-matrix oracle speedup of the best configuration over the default (3), and
+train a predictor on cheap matrix features to pick a good configuration under a
+leave-one-group-out protocol (4--6). We then repeat the sweep on \hypre{}
+BoomerAMG to test whether the findings generalise (7): tunability replicates but
+its magnitude is default-driven and does not transfer between libraries, whereas
+intrinsic solvability does.}
 \label{fig:overview}
 \end{figure}
 
