@@ -8,12 +8,12 @@ build/
 *.exe
 *.out
 
-# LaTeX build products (keep .tex, .png, and the built PDFs)
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/arxiv/
-paper/*.synctex.gz
+# Manuscript kept out of the public repo until publication (re-included then).
+# The reproducibility artifact stays public, including the figure-generation
+# scripts and figures under paper/figure/ that reproduce.py needs.
+paper/
+!paper/figure/
+!paper/figure/**
 
 # Python
 __pycache__/
