@@ -8,7 +8,13 @@ Program (26-SR-01) of the Ministry of Science, ICT, and Future Planning.
 figure-generation scripts are released at
 \url{https://github.com/mirryou-maker/amg-tuning-crosslib}; \texttt{python
 reproduce.py} regenerates every figure and headline number from the released
-data.
+data. The repository also ships the predictor as a ready-to-use tool
+(\texttt{python tools/recommend.py your\_matrix.mtx}) that prints a ranked
+short-list of \amgcl{} or \hypre{} configurations, with parameter strings that
+paste directly into each solver's runtime interface; the top suggestion is a
+heuristic (it solves $\sim\!83$--$89\%$ of unseen matrices and captures a
+median $\sim\!43$--$49\%$ of the oracle), so the intended use is to try the top
+few and keep the fastest.
 
 \emph{Generative AI disclosure.} In accordance with the ACM Policy on
 Authorship, the author discloses the use of an AI coding assistant (Claude
