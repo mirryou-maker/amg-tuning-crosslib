@@ -1,8 +1,12 @@
 # Tuning algebraic multigrid: a cross-library empirical study
 
-Reproducibility artifact for the paper *"How much is there to gain from tuning
-an algebraic multigrid solver? A cross-library empirical study with cheap,
-honestly-priced matrix features"* (Chun-Yeol You, DGIST).
+Reproducibility artifact for the paper *"Tuning Internal Parameters of
+Algebraic Multigrid: A Cross-Library Study of Achievable Speedup and
+Cheap-Feature Prediction"* (Chun-Yeol You, DGIST).
+
+**New here?** See [`USAGE.md`](USAGE.md) for a two-step quick start:
+reproduce the paper, or get a parameter recommendation for your own matrix
+(`python tools/recommend.py your_matrix.mtx`).
 
 We sweep the internal parameters of two standard algebraic multigrid (AMG)
 libraries — [AMGCL](https://github.com/ddemidov/amgcl) and
@@ -67,6 +71,7 @@ docs/REPRODUCE.md      Level-2 full pipeline
 | hypre runner + sweep | `hypre_runner.c`, `hypre_sweep.py`, `hypre_sweep.pbs`, `hypre_shard_worker.sh` |
 | matrix selection / fetch | `select_phase2.py`, `fetch_suitesparse.py` |
 | features + predictor | `compute_features.py`, `phase2_predictor.py`, `poc_predictor.py` |
+| **recommend for your matrix** | `recommend.py` (see [`USAGE.md`](USAGE.md)) |
 | analysis | `analyze.py`, `hypre_h3_analyze.py`, `hypre_analyze.py` |
 | cluster build / probes | `build_iremb.sh`, `build_hypre` (see docs), `cv_probe.py` |
 
