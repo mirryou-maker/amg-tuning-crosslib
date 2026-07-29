@@ -25,9 +25,9 @@
 
 \begin{document}
 
-\title{How much is there to gain from tuning an algebraic multigrid solver?}
-\subtitle{A cross-library empirical study with cheap, honestly-priced matrix
-features}
+\title{Tuning Internal Parameters of Algebraic Multigrid}
+\subtitle{A Cross-Library Study of Achievable Speedup and Cheap-Feature
+Prediction}
 
 \author{Chun-Yeol You}
 \affiliation{%
@@ -141,6 +141,21 @@ is library-dependent and driven by default quality, whereas intrinsic
 solvability is library-independent (Section~\ref{sec:crosslib}).
 \item We release all tooling and the full sweep dataset for reproduction.
 \end{enumerate}
+Figure~\ref{fig:overview} summarises the study end to end.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{concept_diagram.png}
+\caption{Overview. We sweep 88 internal configurations of \amgcl{} over 150
+(later 300) SuiteSparse matrices (1--2), measure the per-matrix oracle speedup
+of the best configuration over the default (3), and train a predictor on cheap
+matrix features to pick a good configuration under a leave-one-group-out
+protocol (4--6). We then repeat the sweep on \hypre{} BoomerAMG to test whether
+the findings generalise (7): tunability replicates but its magnitude is
+default-driven and does not transfer between libraries, whereas intrinsic
+solvability does.}
+\label{fig:overview}
+\end{figure}
 
 \section{Related work}
 \label{sec:related}
@@ -242,17 +257,34 @@ library & ok & timeout & max-iter & diverged & error & stalled \\
 
 \paragraph{Features and predictor.}
 We extract features in three cost tiers: Tier~0 (structure: size, density,
-row-nonzero distribution, bandwidth, pattern symmetry, diagonal presence),
-Tier~1 (cheap value-based: diagonal dominance, value asymmetry, a
-Gershgorin bound, a few power-iteration steps), and Tier~2 (a sparse
-condition-number estimate). The predictor is a gradient-boosted
-classifier/regressor~\cite{friedman2001,scikit} that, given matrix features and
-a one-hot configuration encoding, predicts whether a configuration will
-succeed and its log solve-time; per matrix it picks the fastest
-predicted-successful configuration. \textbf{All predictor numbers use
-leave-one-group-out cross-validation}: every matrix from a held-out SuiteSparse
-group is excluded from training, so no sibling leaks across the split.
-Algorithm~\ref{alg:predict} states the selection procedure.
+row-nonzero mean/spread/extremes, relative bandwidth, pattern symmetry,
+diagonal-presence fraction), Tier~1 (cheap value-based: diagonal-dominance
+fraction, value asymmetry $\lVert A-A^{\top}\rVert_F/\lVert A\rVert_F$, a
+Gershgorin spectral-radius bound, and a dominant-eigenvalue estimate from eight
+power-iteration steps on $|A|$), and Tier~2 (a symmetric-part
+condition-number estimate from a few Lanczos-type steps). Every feature is
+scale-normalised across the training set.
+
+Each solve becomes one training example whose input is the matrix feature
+vector concatenated with a one-hot encoding of the configuration (coarsening
+family, relaxation type, and threshold, plus the fill level for ILU($k$)). Two
+gradient-boosted-tree models~\cite{friedman2001,scikit} are fit (each 120
+trees, depth 3): a classifier $S$ for $\Pr[\text{solve}]$ over all runs, and a
+regressor $R$ for $\log t_{\text{total}}$ over the converged runs only. For a
+test matrix we score all configurations and pick the one of smallest predicted
+time among those with $S>0.5$, falling back to the highest $S$ if none clears
+the threshold (Algorithm~\ref{alg:predict}). We report, per matrix, whether the
+picked configuration actually converged and the fraction of the oracle
+log-speedup it captured. The oracle itself is computed only over configurations
+that converge with the non-degenerate right-hand side.
+
+\textbf{All predictor numbers use leave-one-group-out cross-validation}: every
+matrix from a held-out SuiteSparse group is excluded from training, so no
+sibling leaks across the split. The cross-library transfer experiments
+(Section~\ref{sec:crosslib}) use the same features but at the matrix level ---
+predicting ``does any configuration solve this matrix?'' and the per-matrix
+oracle magnitude --- so a model trained on one library can be applied to the
+other despite their disjoint configuration spaces.
 
 \begin{algorithm}[t]
 \caption{Per-matrix configuration selection (evaluated leave-one-group-out).}
