@@ -457,8 +457,16 @@ release all code and data so these claims can be reproduced and extended.
 
 \begin{acks}
 This work was supported by the National Research Foundation of Korea (NRF)
-(No.\ RS-2026-25502724) and the Strategic Research Program under the DGIST R\&D
+(Nos.\ RS-2025-25463492 and RS-2026-25472340) and the Strategic Research
+Program under the DGIST R\&D
 Program (26-SR-01) of the Ministry of Science, ICT, and Future Planning.
+
+\emph{Data and code availability.} The sweep dataset (13{,}200 \amgcl{} and
+5{,}400 \hypre{} solves), the feature extractor, the predictor, and all
+figure-generation scripts are released at
+\url{https://github.com/mirryou-maker/amg-tuning-crosslib}; \texttt{python
+reproduce.py} regenerates every figure and headline number from the released
+data.
 
 \emph{Generative AI disclosure.} In accordance with the ACM Policy on
 Authorship, the author discloses the use of an AI coding assistant (Claude
@@ -474,6 +482,46 @@ material herein.
 
 \bibliographystyle{ACM-Reference-Format}
 \begin{thebibliography}{99}
+\bibitem{ruge1987} J. W. Ruge and K. St\"uben. 1987.
+Algebraic multigrid. In \emph{Multigrid Methods}. SIAM, 73--130.
+
+\bibitem{stuben2001} K. St\"uben. 2001.
+A review of algebraic multigrid.
+\emph{J. Comput. Appl. Math.} 128 (2001), 281--309.
+
+\bibitem{vanek1996} P. Van\v{e}k, J. Mandel, and M. Brezina. 1996.
+Algebraic multigrid by smoothed aggregation for second and fourth order
+elliptic problems. \emph{Computing} 56 (1996), 179--196.
+
+\bibitem{petsc} S. Balay et al. 2023.
+PETSc/TAO Users Manual. Technical Report ANL-21/39. Argonne National Laboratory.
+
+\bibitem{trilinos} M. A. Heroux et al. 2005.
+An overview of the Trilinos project.
+\emph{ACM Trans. Math. Softw.} 31 (2005), 397--423.
+
+\bibitem{hypre} R. D. Falgout and U. M. Yang. 2002.
+hypre: A library of high performance preconditioners. In \emph{Computational
+Science -- ICCS 2002} (LNCS 2331). Springer, 632--641.
+
+\bibitem{amgcl} D. Demidov. 2019.
+AMGCL: An efficient, flexible, and extensible algebraic multigrid
+implementation. \emph{Lobachevskii J. Math.} 40 (2019), 535--546.
+
+\bibitem{rice1976} J. R. Rice. 1976.
+The algorithm selection problem. \emph{Adv. Comput.} 15 (1976), 65--118.
+
+\bibitem{bhowmick2009} S. Bhowmick, B. Toth, and P. Raghavan. 2009.
+Towards low-cost, high-accuracy classifiers for linear solver selection. In
+\emph{Computational Science -- ICCS 2009} (LNCS 5544). Springer, 463--472.
+
+\bibitem{sood2019} K. Sood. 2019.
+\emph{Iterative Solver Selection Techniques for Sparse Linear Systems}.
+Ph.D. Dissertation. University of Oregon.
+
+\bibitem{tang2022} Z. Tang, H. Zhang, and J. Chen. 2022.
+Graph neural networks for selection of preconditioners and iterative solvers.
+In \emph{NeurIPS 2022 Workshop (GLFrontiers)}.
 
 \bibitem{you2026mumax} C.-Y. You. 2026.
 Optimization of MuMax3 by using Claude Code: A CUDAgraph-based case study
@@ -486,57 +534,29 @@ Variance-reduced trajectory unravelings for GPU noisy quantum-circuit
 simulation: Characterization and a Qiskit-Aer integration gap.
 arXiv:2607.17678 (2026).
 
-\bibitem{ruge1987} J. W. Ruge and K. St\"uben. 1987.
-Algebraic multigrid. In \emph{Multigrid Methods}. SIAM, 73--130.
+\bibitem{kotthoff2016} L. Kotthoff. 2016.
+Algorithm selection for combinatorial search problems: A survey. In \emph{Data
+Mining and Constraint Programming} (LNCS 10101). Springer, 149--190.
 
-\bibitem{stuben2001} K. St\"uben. 2001.
-A review of algebraic multigrid.
-\emph{J. Comput. Appl. Math.} 128 (2001), 281--309.
+\bibitem{chen2024gnp} J. Chen. 2024.
+Graph neural preconditioners for iterative solutions of sparse linear systems.
+arXiv:2406.00809 (2024).
 
-\bibitem{vanek1996} P. Van\v{e}k, J. Mandel, and M. Brezina. 1996.
-Algebraic multigrid by smoothed aggregation for second and fourth order
-elliptic problems. \emph{Computing} 56 (1996), 179--196.
-
-\bibitem{brandt1985} A. Brandt, S. F. McCormick, and J. Ruge. 1985.
-Algebraic multigrid (AMG) for sparse matrix equations. In \emph{Sparsity and
-Its Applications}. Cambridge University Press.
-
-\bibitem{xu2017} J. Xu and L. Zikatanov. 2017.
-Algebraic multigrid methods. \emph{Acta Numerica} 26 (2017), 591--721.
+\bibitem{hausner2025} P. H\"ausner, O. \"Oktem, and J. Sj\"olund. 2025.
+Neural incomplete factorization: Learning preconditioners for the conjugate
+gradient method. In \emph{Northern Lights Deep Learning Conference (NLDL)}.
 
 \bibitem{henson2002} V. E. Henson and U. M. Yang. 2002.
 BoomerAMG: A parallel algebraic multigrid solver and preconditioner.
 \emph{Appl. Numer. Math.} 41 (2002), 155--177.
 
-\bibitem{hypre} R. D. Falgout and U. M. Yang. 2002.
-hypre: A library of high performance preconditioners. In \emph{Computational
-Science -- ICCS 2002} (LNCS 2331). Springer, 632--641.
-
 \bibitem{desterck2006} H. De Sterck, U. M. Yang, and J. J. Heys. 2006.
 Reducing complexity in parallel algebraic multigrid preconditioners.
 \emph{SIAM J. Matrix Anal. Appl.} 27 (2006), 1019--1039.
 
-\bibitem{amgcl} D. Demidov. 2019.
-AMGCL: An efficient, flexible, and extensible algebraic multigrid
-implementation. \emph{Lobachevskii J. Math.} 40 (2019), 535--546.
-
-\bibitem{petsc} S. Balay et al. 2023.
-PETSc/TAO Users Manual. Technical Report ANL-21/39. Argonne National Laboratory.
-
-\bibitem{trilinos} M. A. Heroux et al. 2005.
-An overview of the Trilinos project.
-\emph{ACM Trans. Math. Softw.} 31 (2005), 397--423.
-
-\bibitem{pyamg} N. Bell, L. N. Olson, and J. Schroder. 2022.
-PyAMG: Algebraic multigrid solvers in Python.
-\emph{J. Open Source Softw.} 7 (2022), 4142.
-
 \bibitem{davis2011} T. A. Davis and Y. Hu. 2011.
 The University of Florida sparse matrix collection.
 \emph{ACM Trans. Math. Softw.} 38 (2011), 1:1--1:25.
-
-\bibitem{saad2003} Y. Saad. 2003.
-\emph{Iterative Methods for Sparse Linear Systems} (2nd ed.). SIAM.
 
 \bibitem{hestenes1952} M. R. Hestenes and E. Stiefel. 1952.
 Methods of conjugate gradients for solving linear systems.
@@ -551,47 +571,8 @@ Bi-CGSTAB: A fast and smoothly converging variant of Bi-CG for the solution of
 nonsymmetric linear systems.
 \emph{SIAM J. Sci. Stat. Comput.} 13 (1992), 631--644.
 
-\bibitem{trefethen1997} L. N. Trefethen and D. Bau. 1997.
-\emph{Numerical Linear Algebra}. SIAM.
-
-\bibitem{george1973} A. George. 1973.
-Nested dissection of a regular finite element mesh.
-\emph{SIAM J. Numer. Anal.} 10 (1973), 345--363.
-
-\bibitem{rice1976} J. R. Rice. 1976.
-The algorithm selection problem. \emph{Adv. Comput.} 15 (1976), 65--118.
-
-\bibitem{kotthoff2016} L. Kotthoff. 2016.
-Algorithm selection for combinatorial search problems: A survey. In \emph{Data
-Mining and Constraint Programming} (LNCS 10101). Springer, 149--190.
-
-\bibitem{bhowmick2009} S. Bhowmick, B. Toth, and P. Raghavan. 2009.
-Towards low-cost, high-accuracy classifiers for linear solver selection. In
-\emph{Computational Science -- ICCS 2009} (LNCS 5544). Springer, 463--472.
-
-\bibitem{sood2019} K. Sood. 2019.
-\emph{Iterative Solver Selection Techniques for Sparse Linear Systems}.
-Ph.D. Dissertation. University of Oregon.
-
-\bibitem{eijkhout2010} V. Eijkhout and E. Fuentes. 2010.
-Machine learning for multi-stage selection of numerical methods. In \emph{New
-Advances in Machine Learning}. InTech.
-
-\bibitem{tang2022} Z. Tang, H. Zhang, and J. Chen. 2022.
-Graph neural networks for selection of preconditioners and iterative solvers.
-In \emph{NeurIPS 2022 Workshop (GLFrontiers)}.
-
-\bibitem{chen2024gnp} J. Chen. 2024.
-Graph neural preconditioners for iterative solutions of sparse linear systems.
-arXiv:2406.00809 (2024).
-
-\bibitem{hausner2025} P. H\"ausner, O. \"Oktem, and J. Sj\"olund. 2025.
-Neural incomplete factorization: Learning preconditioners for the conjugate
-gradient method. In \emph{Northern Lights Deep Learning Conference (NLDL)}.
-
-\bibitem{trifonov2024} V. Trifonov et al. 2024.
-Learning from linear algebra: A graph neural network approach to preconditioner
-design for conjugate gradient solvers. arXiv:2405.15557 (2024).
+\bibitem{saad2003} Y. Saad. 2003.
+\emph{Iterative Methods for Sparse Linear Systems} (2nd ed.). SIAM.
 
 \bibitem{friedman2001} J. H. Friedman. 2001.
 Greedy function approximation: A gradient boosting machine.
@@ -600,6 +581,32 @@ Greedy function approximation: A gradient boosting machine.
 \bibitem{scikit} F. Pedregosa et al. 2011.
 Scikit-learn: Machine learning in Python.
 \emph{J. Mach. Learn. Res.} 12 (2011), 2825--2830.
+
+\bibitem{brandt1985} A. Brandt, S. F. McCormick, and J. Ruge. 1985.
+Algebraic multigrid (AMG) for sparse matrix equations. In \emph{Sparsity and
+Its Applications}. Cambridge University Press.
+
+\bibitem{xu2017} J. Xu and L. Zikatanov. 2017.
+Algebraic multigrid methods. \emph{Acta Numerica} 26 (2017), 591--721.
+
+\bibitem{pyamg} N. Bell, L. N. Olson, and J. Schroder. 2022.
+PyAMG: Algebraic multigrid solvers in Python.
+\emph{J. Open Source Softw.} 7 (2022), 4142.
+
+\bibitem{trefethen1997} L. N. Trefethen and D. Bau. 1997.
+\emph{Numerical Linear Algebra}. SIAM.
+
+\bibitem{george1973} A. George. 1973.
+Nested dissection of a regular finite element mesh.
+\emph{SIAM J. Numer. Anal.} 10 (1973), 345--363.
+
+\bibitem{eijkhout2010} V. Eijkhout and E. Fuentes. 2010.
+Machine learning for multi-stage selection of numerical methods. In \emph{New
+Advances in Machine Learning}. InTech.
+
+\bibitem{trifonov2024} V. Trifonov et al. 2024.
+Learning from linear algebra: A graph neural network approach to preconditioner
+design for conjugate gradient solvers. arXiv:2405.15557 (2024).
 
 \bibitem{falgout2006} R. D. Falgout, J. E. Jones, and U. M. Yang. 2006.
 The design and implementation of hypre, a library of parallel high performance
